@@ -1,12 +1,12 @@
 #ifndef SYSCALLS_TABLE_H
 #define SYSCALLS_TABLE_H
 
-struct syscall_entry {
+typedef struct {
     int number;
     const char *name;
-};
+} syscall_entry;
 
-struct syscall_entry syscalls_table[] = {
+static const syscall_entry syscalls_table[] = {
     {0, "read"},
     {1, "write"},
     {2, "open"},
