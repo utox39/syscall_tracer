@@ -387,4 +387,4 @@ struct syscall_entry syscalls_table[] = {
     {465, "listxattrat"},
     {466, "removexattrat"},
 };
-#endif /* SYSCALLS_TABLE */
+#endif /* SYSCALLS_TABLE_H */
