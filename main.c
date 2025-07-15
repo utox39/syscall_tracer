@@ -78,6 +78,11 @@ const char *get_syscall_name(unsigned long long syscall_num) {
 }
 
 int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("usage: %s <executable/program>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
     syscall_log_t log;
     init_syscall_log(&log);
 
