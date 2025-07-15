@@ -4,9 +4,9 @@
 typedef struct {
     int number;
     const char *name;
-} syscall_entry;
+} syscall_info;
 
-static const syscall_entry syscalls_table[] = {
+static const syscall_info syscalls_table[] = {
     {0, "read"},
     {1, "write"},
     {2, "open"},
