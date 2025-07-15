@@ -28,10 +28,13 @@ int main(int argc, char *argv[]) {
 
     tracee_pid = fork();
     if (tracee_pid < 0) {
-        perror("cannot create a tracee process.\n");
+        perror("cannot create a tracee process.");
         exit(EXIT_FAILURE);
     } else if (tracee_pid == 0) {
-        ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+        if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1) {
+            perror("PTRACE_TRACEME failed.");
+            exit(EXIT_FAILURE);
+        }
         execvp(argv[1], &argv[1]);
     }
 
@@ -51,7 +54,10 @@ int main(int argc, char *argv[]) {
             break;
         }
 
-        ptrace(PTRACE_GETREGS, tracee_pid, NULL, &regs);
+        if (ptrace(PTRACE_GETREGS, tracee_pid, NULL, &regs) == -1) {
+            perror("PTRACE_GETREGS failed.");
+            exit(EXIT_FAILURE);
+        }
 
         if (in_syscall == false) {
             printf("syscall: %s [%lld] (", get_syscall_name(regs.orig_rax),
@@ -65,7 +71,10 @@ int main(int argc, char *argv[]) {
             in_syscall = false;
         }
 
-        ptrace(PTRACE_SYSCALL, tracee_pid, NULL, NULL);
+        if (ptrace(PTRACE_SYSCALL, tracee_pid, NULL, NULL) == -1) {
+            perror("PTRACE_SYSCALL failed.");
+            exit(EXIT_FAILURE);
+        }
     }
 
     return 0;
