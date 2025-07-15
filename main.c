@@ -24,13 +24,13 @@ const char *get_syscall_name(unsigned long long syscall_num) {
 }
 
 int main(int argc, char *argv[]) {
-    pid_t tracee_pid;
+    pid_t tracer_pid;
 
-    tracee_pid = fork();
-    if (tracee_pid < 0) {
-        perror("cannot create a tracee process.");
+    tracer_pid = fork();
+    if (tracer_pid < 0) {
+        perror("cannot create a tracer process.");
         exit(EXIT_FAILURE);
-    } else if (tracee_pid == 0) {
+    } else if (tracer_pid == 0) {
         if (ptrace(PTRACE_TRACEME, 0, NULL, NULL) == -1) {
             perror("PTRACE_TRACEME failed.");
             exit(EXIT_FAILURE);
@@ -45,16 +45,16 @@ int main(int argc, char *argv[]) {
     struct user_regs_struct regs;
 
     // Skip the first syscall (execve)
-    waitpid(tracee_pid, &status, 0);
-    ptrace(PTRACE_SYSCALL, tracee_pid, NULL, NULL);
+    waitpid(tracer_pid, &status, 0);
+    ptrace(PTRACE_SYSCALL, tracer_pid, NULL, NULL);
 
     while (1) {
-        waitpid(tracee_pid, &status, 0);
+        waitpid(tracer_pid, &status, 0);
         if (WIFEXITED(status)) {
             break;
         }
 
-        if (ptrace(PTRACE_GETREGS, tracee_pid, NULL, &regs) == -1) {
+        if (ptrace(PTRACE_GETREGS, tracer_pid, NULL, &regs) == -1) {
             perror("PTRACE_GETREGS failed.");
             exit(EXIT_FAILURE);
         }
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
             in_syscall = false;
         }
 
-        if (ptrace(PTRACE_SYSCALL, tracee_pid, NULL, NULL) == -1) {
+        if (ptrace(PTRACE_SYSCALL, tracer_pid, NULL, NULL) == -1) {
             perror("PTRACE_SYSCALL failed.");
             exit(EXIT_FAILURE);
         }
