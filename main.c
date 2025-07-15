@@ -11,8 +11,6 @@
 
 #include "syscalls_table.h"
 
-#define CAPACITY_INCREASE 16
-
 typedef struct {
     unsigned long long num;
     unsigned long long rdi;
