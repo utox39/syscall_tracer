@@ -2,7 +2,7 @@
 #define SYSCALLS_TABLE_H
 
 typedef struct {
-    int number;
+    unsigned long long number;
     const char *name;
 } syscall_info_t;
 
