@@ -17,6 +17,7 @@ It uses `ptrace` to intercept and log system calls executed by a target process.
 ## Requirements
 
 - [gcc](https://gcc.gnu.org/)
+- [Make](https://www.gnu.org/software/make/manual/make.html)
 
 ## Installation
 
